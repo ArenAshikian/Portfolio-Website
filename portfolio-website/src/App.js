@@ -1,25 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Resume from './components/Resume/Resume'; // Import your Resume component
+import Header from './components/Header/header'; // Import your Header component
+import './App.css'; // Import your App.css file
 
-function App() {
+
+
+function App () {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App"> {/* Apply the gradient background styles here */}
+      <Header />
+      <Resume />
     </div>
-  );
-}
-
+  )
+};
 export default App;
