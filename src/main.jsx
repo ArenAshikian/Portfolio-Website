@@ -3,14 +3,12 @@ import{createRoot}from'react-dom/client';
 import'./styles.css';
 
 const base='/Portfolio-Website/';
-
 const featured=[
- {name:'Credit Card Fraud Classifier',meta:'USC EE 559 · Machine Learning',summary:'A fraud-detection project built around 284,807 transactions, severe class imbalance, and threshold tuning rather than accuracy theater.',result:'Best logistic-regression F1 ≈ 0.736 at a threshold around 0.93.',tech:['Python','NumPy','Classification','Model evaluation'],href:'https://github.com/ArenAshikian/EE559-Final-Project',visual:<><b>284,807</b><span>transactions</span><i>→</i><b>0.736</b><span>best F1</span></>},
- {name:'Cloud Traffic Analytics',meta:'USC EE 547 · Cloud + Computer Vision',summary:'A full-stack traffic-analysis system combining computer vision, an API, persistence, a web interface, and AWS deployment.',result:'FastAPI + Vite + PostgreSQL + YOLOv8n deployed through AWS EC2.',tech:['FastAPI','Vite','PostgreSQL','YOLOv8n','AWS'],href:'https://github.com/ArenAshikian/EE547_HW6',visual:<><span>camera</span><i>→</i><b>YOLO</b><i>→</i><span>API</span><i>→</i><span>Postgres</span></>},
- {name:'Smart Aquarium Monitoring',meta:'IoT · Mobile · Hardware',summary:'A hardware-connected monitoring system for aquarium conditions, built around a Raspberry Pi, environmental sensors, data collection, alerts, and a mobile-facing interface.',result:'A project where software had to interact with actual sensors and physical conditions.',tech:['Raspberry Pi','Python','Flutter','Sensors'],href:'https://github.com/ArenAshikian/smart-aquarium',visual:<><span>pH</span><span>temp</span><span>water</span><i>→</i><b>Pi</b><i>→</i><span>app</span></>},
- {name:'Instagram Comment Automation',meta:'Backend · Business Automation',summary:'An internal workflow for a jewelry business that maps Instagram Media IDs to product data and responds to an exact comment trigger using the official Meta API.',result:'Designed around webhook verification, idempotency, validation, kill switches, and production safeguards.',tech:['Python','FastAPI','PostgreSQL','Meta API','Google Sheets API'],href:null,visual:<><span>comment</span><i>→</i><span>webhook</span><i>→</i><b>product</b><i>→</i><span>reply</span></>}
+ {name:'Credit Card Fraud Classifier',meta:'USC EE 559 · Machine Learning',summary:'Fraud detection across 284,807 transactions, with the work centered on class imbalance, model behavior, and decision thresholds instead of raw accuracy.',result:'Logistic regression reached ≈ 0.736 F1 with the decision threshold tuned around 0.93.',tech:['Python','NumPy','Classification','Model evaluation'],href:'https://github.com/ArenAshikian/EE559-Final-Project',diagram:<><span className="metric"><b>284,807</b><small>transactions</small></span><span className="flow">→</span><span className="metric"><b>0.93</b><small>threshold</small></span><span className="flow">→</span><span className="metric accent"><b>0.736</b><small>F1</small></span></>},
+ {name:'Cloud Traffic Analytics',meta:'USC EE 547 · Cloud + Computer Vision',summary:'A full-stack traffic-analysis system joining computer vision, an API, persistent storage, a web interface, and AWS infrastructure.',result:'FastAPI + Vite + PostgreSQL + YOLOv8n, deployed on AWS EC2.',tech:['FastAPI','Vite','PostgreSQL','YOLOv8n','AWS'],href:'https://github.com/ArenAshikian/EE547_HW6',diagram:<><span>camera</span><i>→</i><b>YOLO</b><i>→</i><span>API</span><i>→</i><span>Postgres</span></>},
+ {name:'Smart Aquarium Monitoring',meta:'IoT · Mobile · Hardware',summary:'A Raspberry Pi system that reads aquarium conditions through physical sensors and makes those readings useful through monitoring, alerts, and a mobile interface.',result:'Software built around real sensors, imperfect readings, and physical conditions.',tech:['Raspberry Pi','Python','Flutter','Sensors'],href:'https://github.com/ArenAshikian/smart-aquarium',diagram:<><span>pH</span><span>temp</span><span>TDS</span><i>→</i><b>Pi</b><i>→</i><span>Flutter</span></>},
+ {name:'Instagram Comment Automation',meta:'Backend · Business Automation',summary:'An internal jewelry-business workflow that connects Instagram comments to the correct product data using permanent Media IDs and the official Meta API.',result:'Designed around webhook verification, idempotency, validation, kill switches, and safe failure behavior.',tech:['Python','FastAPI','PostgreSQL','Meta API','Google Sheets API'],href:null,diagram:<><span>RING</span><i>→</i><span>webhook</span><i>→</i><b>lookup</b><i>→</i><span>private reply</span></>}
 ];
-
 const moreWork=[
  ['Dog Breed Predictor','Computer Vision','120 breeds · 20,000+ images · 85% test accuracy','https://github.com/ArenAshikian/Dog-Breed-Predictor'],
  ['Image Super-Resolution Pipeline','Deep Learning','SRCNN · DIV2K · PSNR evaluation',null],
@@ -19,83 +17,28 @@ const moreWork=[
  ['Klassicle','Full Stack · Team','Flask · SQLAlchemy · Scrum · Jira','https://github.com/ArenAshikian/Klassicle'],
  ['DiamondModel','Applied ML · Jewelry','Machine learning applied to diamond-related data','https://github.com/ArenAshikian/DiamondModel']
 ];
-
-const skills={
- 'Languages':'Python · JavaScript · Java · C/C++ · Dart · Swift · SQL · R',
- 'ML / data':'PyTorch · TensorFlow · Keras · NumPy · classification · evaluation · computer vision',
- 'Web / backend':'React · Vite · FastAPI · Flask · Django · SQLAlchemy · REST APIs · PostgreSQL',
- 'Cloud / tools':'AWS · Docker · GitHub Actions · Git · Jira · Supabase',
- 'Hardware / mobile':'Flutter · Raspberry Pi · Arduino · sensor integration'
-};
+const skills={'Languages':'Python · JavaScript · Java · C/C++ · Dart · Swift · SQL · R','ML / data':'PyTorch · TensorFlow · Keras · NumPy · classification · evaluation · computer vision','Web / backend':'React · Vite · FastAPI · Flask · Django · SQLAlchemy · REST APIs · PostgreSQL','Cloud / tools':'AWS · Docker · GitHub Actions · Git · Jira · Supabase','Hardware / mobile':'Flutter · Raspberry Pi · Arduino · sensor integration'};
 
 function App(){
  const[theme,setTheme]=useState(()=>localStorage.getItem('theme')||'light');
- const[menu,setMenu]=useState(false);
- const[copied,setCopied]=useState(false);
+ const[menu,setMenu]=useState(false);const[copied,setCopied]=useState(false);const[progress,setProgress]=useState(0);
  useEffect(()=>{document.documentElement.dataset.theme=theme;localStorage.setItem('theme',theme)},[theme]);
  useEffect(()=>{document.body.classList.toggle('menu-open',menu);return()=>document.body.classList.remove('menu-open')},[menu]);
- useEffect(()=>{const nodes=[...document.querySelectorAll('[data-reveal]')];if(!('IntersectionObserver'in window)||matchMedia('(prefers-reduced-motion: reduce)').matches){nodes.forEach(n=>n.classList.add('show'));return}const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.08});nodes.forEach(n=>io.observe(n));return()=>io.disconnect()},[]);
+ useEffect(()=>{const update=()=>{const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max:0)};update();addEventListener('scroll',update,{passive:true});return()=>removeEventListener('scroll',update)},[]);
+ useEffect(()=>{const nodes=[...document.querySelectorAll('[data-reveal]')];if(!('IntersectionObserver'in window)||matchMedia('(prefers-reduced-motion: reduce)').matches){nodes.forEach(n=>n.classList.add('show'));return}const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.06,rootMargin:'0px 0px -35px'});nodes.forEach(n=>io.observe(n));return()=>io.disconnect()},[]);
+ useEffect(()=>{const esc=e=>e.key==='Escape'&&setMenu(false);addEventListener('keydown',esc);return()=>removeEventListener('keydown',esc)},[]);
  const copyEmail=async()=>{try{await navigator.clipboard.writeText('ashikianaren@gmail.com');setCopied(true);setTimeout(()=>setCopied(false),1400)}catch{location.href='mailto:ashikianaren@gmail.com'}};
  return <>
-  <header className="header">
-   <a className="wordmark" href="#top"><b>Aren</b> Ashikian</a>
-   <button className="menu" onClick={()=>setMenu(!menu)} aria-expanded={menu}>{menu?'Close':'Menu'}</button>
-   <nav className={menu?'nav open':'nav'}>
-    {['work','about','experience','education','contact'].map(x=><a key={x} href={`#${x}`} onClick={()=>setMenu(false)}>{x}</a>)}
-    <a href={`${base}resume.html`} target="_blank" rel="noreferrer">résumé ↗</a>
-    <button onClick={()=>setTheme(theme==='light'?'dark':'light')}>{theme==='light'?'dark':'light'} mode</button>
-   </nav>
-  </header>
-
+  <div className="progress" style={{transform:`scaleX(${progress})`}}/>
+  <header className="header"><a className="wordmark" href="#top" aria-label="Aren Ashikian, home"><b>Aren</b> Ashikian</a><button className="menu" onClick={()=>setMenu(!menu)} aria-expanded={menu} aria-controls="site-nav">{menu?'Close':'Menu'}</button><nav id="site-nav" className={menu?'nav open':'nav'}>{['work','about','experience','education','contact'].map(x=><a key={x} href={`#${x}`} onClick={()=>setMenu(false)}>{x}</a>)}<a href={`${base}resume.html`} target="_blank" rel="noreferrer">résumé ↗</a><button onClick={()=>setTheme(theme==='light'?'dark':'light')}>{theme==='light'?'dark':'light'} mode</button></nav></header>
   <main id="top">
-   <section className="hero shell">
-    <p className="eyebrow">Software Automation & Systems Engineer · Southern California</p>
-    <h1>I make software for <em>real constraints.</em></h1>
-    <div className="hero-note">
-     <p>I'm Aren. I build automation, full-stack systems, machine-learning projects, cloud software, and hardware-connected tools. I'm also finishing an M.S. in Electrical & Computer Engineering at USC, concentrating in Machine Learning & Data Science.</p>
-     <div className="hero-links"><a href="#work">Selected work ↓</a><a href={`${base}resume.html`} target="_blank" rel="noreferrer">Résumé ↗</a><a href="https://github.com/ArenAshikian" target="_blank" rel="noreferrer">GitHub ↗</a></div>
-    </div>
-    <p className="currently"><span/>Currently: engineering at Pricon · USC M.S. expected Dec 2026 · open to opportunities</p>
-   </section>
-
-   <section id="work" className="shell section" data-reveal>
-    <header className="section-title"><p>Selected work</p><span>Four projects that best show how I think and build.</span></header>
-    <div className="featured-work">
-     {featured.map((p,i)=><article className="case" key={p.name}>
-      <div className="case-num">0{i+1}</div>
-      <div className="case-copy"><p className="case-meta">{p.meta}</p><h2>{p.name}</h2><p className="case-summary">{p.summary}</p><p className="case-result">{p.result}</p><div className="case-tech">{p.tech.map(t=><span key={t}>{t}</span>)}</div>{p.href?<a className="case-link" href={p.href} target="_blank" rel="noreferrer">Open repository ↗</a>:<span className="case-private">Private repository</span>}</div>
-      <div className={`project-diagram diagram-${i+1}`} aria-hidden="true">{p.visual}</div>
-     </article>)}
-    </div>
-    <div className="more-work"><h3>More work</h3>{moreWork.map(([name,type,note,href])=><div className="work-row" key={name}><span className="work-type">{type}</span><b>{name}</b><span>{note}</span>{href?<a href={href} target="_blank" rel="noreferrer">↗</a>:<i>private</i>}</div>)}</div>
-   </section>
-
-   <section id="about" className="shell section about" data-reveal>
-    <figure className="portrait"><img src={`${base}profile.webp`} alt="Aren Ashikian"/><figcaption>Aren Ashikian · 2026</figcaption></figure>
-    <div className="about-text"><p className="eyebrow">About</p><h2>I like projects where the software touches something outside the screen.</h2><p>A sensor. A business process. A cloud deployment. A messy dataset. An interface somebody actually has to use. Those projects force better engineering decisions because the constraints aren't hypothetical.</p><p>My work at Pricon centers on automation, systems, hardware and warranty data, vendor services, scheduled jobs, and internal tooling. Graduate work at USC has pulled me deeper into machine learning, databases, and cloud computing.</p><aside>Practical over performative. Measure before optimizing. Make the interface explain itself.</aside></div>
-   </section>
-
-   <section id="experience" className="shell section" data-reveal>
-    <header className="section-title"><p>Experience</p><span>The work I've done when somebody else depended on the result.</span></header>
-    <div className="experience-list">
-     <article><time>2024 — now</time><div><h3>Software Automation & Systems Engineer <small>Pricon</small></h3><p>Build Python automation and data pipelines around hardware and warranty data, external vendor services, scheduled jobs, alerting, onboarding workflows, and hardware lifecycle decisions. Work in Jira/Agile and produce architecture and data-flow documentation for client environments.</p></div></article>
-     <article><time>2022</time><div><h3>Android Mobile Development Tech Fellow <small>CodePath</small></h3><p>Led an Android development course at Irvine Valley College for 10+ students, covering programming fundamentals, UI development, navigation, backend integration, third-party APIs, and GitHub collaboration.</p></div></article>
-     <article><time>2019</time><div><h3>Summer Academy Intern <small>Tustin Public Schools Foundation</small></h3><p>Taught introductory Lua programming in an educational Minecraft environment and helped students design 3D-printable objects.</p></div></article>
-    </div>
-   </section>
-
-   <section id="education" className="shell section education" data-reveal>
-    <header className="section-title"><p>Education</p><span>A CS foundation followed by deeper ML, data, and systems work.</span></header>
-    <div className="schools"><article><time>Expected Dec 2026</time><h3>University of Southern California</h3><p>M.S. Electrical & Computer Engineering<br/><span>Machine Learning & Data Science</span></p></article><article><time>Completed Dec 2024</time><h3>California State University, Fullerton</h3><p>B.S. Computer Science · GPA 3.75</p></article><article><time>Completed</time><h3>Irvine Valley College</h3><p>A.S. Natural Sciences</p></article></div>
-    <div className="toolkit"><h3>Working toolkit</h3>{Object.entries(skills).map(([k,v])=><p key={k}><b>{k}</b><span>{v}</span></p>)}</div>
-   </section>
-
-   <section id="contact" className="shell section contact" data-reveal>
-    <p className="eyebrow">Contact</p><h2>If the work sounds relevant, send me a note.</h2><p>I'm based in Southern California and open to software, ML/data, cloud, and systems engineering opportunities.</p><div className="contact-links"><button onClick={copyEmail}>{copied?'Copied ✓':'Copy email'}</button><a href="mailto:ashikianaren@gmail.com">ashikianaren@gmail.com ↗</a><a href={`${base}resume.html`} target="_blank" rel="noreferrer">Résumé ↗</a><a href="https://www.linkedin.com/in/arenash" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://github.com/ArenAshikian" target="_blank" rel="noreferrer">GitHub ↗</a></div>
-   </section>
-  </main>
-  <footer className="shell"><span>© {new Date().getFullYear()} Aren Ashikian</span><span>React + Vite, designed and written by me.</span></footer>
+   <section className="hero shell"><div><p className="eyebrow">Software Automation & Systems Engineer · Southern California</p><h1>I build software around <em>real constraints.</em></h1></div><div><div className="hero-note"><p>I'm Aren. My work spans automation, full-stack systems, machine learning, cloud software, and hardware-connected tools. I'm finishing an M.S. in Electrical & Computer Engineering at USC with a concentration in Machine Learning & Data Science.</p><div className="hero-links"><a href="#work">Selected work ↓</a><a href={`${base}resume.html`} target="_blank" rel="noreferrer">Résumé ↗</a><a href="https://github.com/ArenAshikian" target="_blank" rel="noreferrer">GitHub ↗</a></div></div><p className="currently"><span/>Currently: engineering at Pricon · USC M.S. expected Dec 2026 · open to opportunities</p></div></section>
+   <section id="work" className="shell section" data-reveal><header className="section-title"><p>Selected work</p><span>Four projects that best show how I approach engineering problems.</span></header><div className="featured-work">{featured.map((p,i)=><article className="case" key={p.name}><div className="case-num">0{i+1}</div><div className="case-copy"><p className="case-meta">{p.meta}</p><h2>{p.name}</h2><p className="case-summary">{p.summary}</p><p className="case-result">{p.result}</p><div className="case-tech">{p.tech.map(t=><span key={t}>{t}</span>)}</div>{p.href?<a className="case-link" href={p.href} target="_blank" rel="noreferrer">View repository <span>↗</span></a>:<span className="case-private">Private repository</span>}</div><div className={`project-diagram diagram-${i+1}`} aria-hidden="true">{p.diagram}</div></article>)}</div><div className="more-work"><h3>More work</h3>{moreWork.map(([name,type,note,href])=><div className="work-row" key={name}><span className="work-type">{type}</span><b>{name}</b><span>{note}</span>{href?<a href={href} aria-label={`${name} repository`} target="_blank" rel="noreferrer">↗</a>:<i>private</i>}</div>)}</div></section>
+   <section id="about" className="shell section about" data-reveal><figure className="portrait"><div className="portrait-frame"><img src={`${base}profile.webp`} alt="Portrait of Aren Ashikian" loading="lazy" decoding="async"/></div><figcaption>Aren Ashikian · Southern California</figcaption></figure><div className="about-text"><p className="eyebrow">About</p><h2>I like projects where software touches something outside the screen.</h2><p>A sensor. A business process. A cloud deployment. A messy dataset. An interface somebody actually has to use. Those projects force better engineering decisions because the constraints aren't hypothetical.</p><p>My work at Pricon centers on automation, systems, hardware and warranty data, vendor services, scheduled jobs, and internal tooling. Graduate work at USC has pulled me deeper into machine learning, databases, and cloud computing.</p><aside>Practical over performative.<br/>Measure before optimizing.<br/>Make the interface explain itself.</aside></div></section>
+   <section id="experience" className="shell section" data-reveal><header className="section-title"><p>Experience</p><span>Work where somebody else depended on the result.</span></header><div className="experience-list"><article><time>2024 — now</time><div><h3>Software Automation & Systems Engineer <small>Pricon</small></h3><p>Build Python automation and data pipelines around hardware and warranty data, external vendor services, scheduled jobs, alerting, onboarding workflows, and hardware lifecycle decisions. Work in Jira/Agile and produce architecture and data-flow documentation for client environments.</p></div></article><article><time>2022</time><div><h3>Android Mobile Development Tech Fellow <small>CodePath</small></h3><p>Led an Android development course at Irvine Valley College for 10+ students, covering programming fundamentals, UI development, navigation, backend integration, third-party APIs, and GitHub collaboration.</p></div></article><article><time>2019</time><div><h3>Summer Academy Intern <small>Tustin Public Schools Foundation</small></h3><p>Taught introductory Lua programming in an educational Minecraft environment and helped students design 3D-printable objects.</p></div></article></div></section>
+   <section id="education" className="shell section education" data-reveal><header className="section-title"><p>Education</p><span>A computer science foundation followed by deeper ML, data, and systems work.</span></header><div className="schools"><article><time>Expected Dec 2026</time><h3>University of Southern California</h3><p>M.S. Electrical & Computer Engineering<br/><span>Machine Learning & Data Science</span></p></article><article><time>Completed Dec 2024</time><h3>California State University, Fullerton</h3><p>B.S. Computer Science · GPA 3.75</p></article><article><time>Completed</time><h3>Irvine Valley College</h3><p>A.S. Natural Sciences</p></article></div><div className="toolkit"><h3>Working toolkit</h3>{Object.entries(skills).map(([k,v])=><p key={k}><b>{k}</b><span>{v}</span></p>)}</div></section>
+   <section id="contact" className="shell section contact" data-reveal><p className="eyebrow">Contact</p><h2>Want to build something useful?</h2><p>I'm based in Southern California and open to software, ML/data, cloud, and systems engineering opportunities.</p><div className="contact-links"><button onClick={copyEmail}>{copied?'Email copied ✓':'Copy email'}</button><a href="mailto:ashikianaren@gmail.com">ashikianaren@gmail.com ↗</a><a href={`${base}resume.html`} target="_blank" rel="noreferrer">Résumé ↗</a><a href="https://www.linkedin.com/in/arenash" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://github.com/ArenAshikian" target="_blank" rel="noreferrer">GitHub ↗</a></div></section>
+  </main><footer className="shell"><span>© {new Date().getFullYear()} Aren Ashikian</span><span>Built with React + Vite.</span></footer>
  </>;
 }
-
 createRoot(document.getElementById('root')).render(<React.StrictMode><App/></React.StrictMode>);
