@@ -17,4 +17,11 @@ npm run build
 
 ## Deployment
 
-Pushes to `main` trigger `.github/workflows/deploy.yml`. GitHub Pages should use **GitHub Actions** as its deployment source. The custom-domain file is `public/CNAME`.
+Pushes to `main` trigger `.github/workflows/deploy.yml`. GitHub Pages should use **GitHub Actions** as its deployment source.
+
+## Portfolio assets
+
+- `public/profile.webp` — portfolio portrait
+- `public/resume.html` — print-friendly current résumé view
+
+The custom domain remains intentionally disconnected while the GitHub Pages preview is under review.
