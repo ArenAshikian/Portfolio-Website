@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
@@ -14,20 +14,226 @@ const projects = [
   {name:'DiamondModel',eyebrow:'Applied ML · Jewelry',description:'A machine-learning project applying modeling techniques to diamond-related data.',detail:'Especially relevant alongside real-world experience in the jewelry industry.',tech:['Python','Data','Machine Learning'],href:'https://github.com/ArenAshikian/DiamondModel'},
 ];
 
-const skills={Languages:['Python','JavaScript','Java','C++','Dart','Swift','SQL','HTML','CSS'],'ML & Data':['NumPy','classification','model evaluation','feature engineering','computer vision'],'Web & Backend':['React','Vite','FastAPI','Flask','SQLAlchemy','REST APIs','PostgreSQL'],'Cloud & Tools':['AWS','Docker','GitHub Actions','Git','Google Cloud concepts','Supabase'],'Mobile & Hardware':['Flutter','Raspberry Pi','Arduino','sensor integration']};
-const education=[['Expected Dec 2026','University of Southern California','M.S. Electrical & Computer Engineering','Machine Learning & Data Science'],['Completed Dec 2024','California State University, Fullerton','B.S. Computer Science','GPA 3.75'],['Completed','Irvine Valley College','A.S. Natural Sciences','']];
+const skills={
+  Languages:['Python','JavaScript','Java','C++','Dart','Swift','SQL','HTML','CSS'],
+  'ML & Data':['NumPy','classification','model evaluation','feature engineering','computer vision'],
+  'Web & Backend':['React','Vite','FastAPI','Flask','SQLAlchemy','REST APIs','PostgreSQL'],
+  'Cloud & Tools':['AWS','Docker','GitHub Actions','Git','Google Cloud concepts','Supabase'],
+  'Mobile & Hardware':['Flutter','Raspberry Pi','Arduino','sensor integration']
+};
 
-function useTheme(){const[theme,setTheme]=useState(()=>localStorage.getItem('theme')||'dark');useEffect(()=>{document.documentElement.dataset.theme=theme;localStorage.setItem('theme',theme)},[theme]);return[theme,setTheme]}
-function App(){const[theme,setTheme]=useTheme();const[filter,setFilter]=useState('All');const[menuOpen,setMenuOpen]=useState(false);const filters=['All','ML','Cloud','Full Stack','Mobile'];const visible=useMemo(()=>filter==='All'?projects:projects.filter(p=>`${p.eyebrow} ${p.description} ${p.tech.join(' ')}`.toLowerCase().includes(filter.toLowerCase())),[filter]);
-useEffect(()=>{document.body.classList.toggle('menu-open',menuOpen);return()=>document.body.classList.remove('menu-open')},[menuOpen]);
-useEffect(()=>{const nodes=[...document.querySelectorAll('[data-reveal]')];if(!('IntersectionObserver'in window)||window.matchMedia('(prefers-reduced-motion: reduce)').matches){nodes.forEach(n=>n.classList.add('is-visible'));return}const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('is-visible')}),{threshold:.08});nodes.forEach(n=>io.observe(n));return()=>io.disconnect()},[]);
-const nav=['work','about','education','skills','contact'];return <><div className="progress" aria-hidden="true"><span/></div><header className="site-header"><a className="brand" href="#top" aria-label="Aren Ashikian home"><span>AA</span><b>Aren Ashikian</b></a><button className="menu-button" onClick={()=>setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="primary-nav">{menuOpen?'Close':'Menu'}</button><nav id="primary-nav" className={menuOpen?'nav open':'nav'} aria-label="Primary navigation">{nav.map(item=><a key={item} href={`#${item}`} onClick={()=>setMenuOpen(false)}>{item}</a>)}<button className="theme-button" onClick={()=>setTheme(theme==='dark'?'light':'dark')} aria-label="Toggle color theme">{theme==='dark'?'Light':'Dark'} theme</button></nav></header>
-<main id="top"><section className="hero section-shell"><div className="hero-kicker">SOFTWARE ENGINEER · ML / DATA · SOUTHERN CALIFORNIA</div><h1>I build software that has to <em>work</em>, not just demo well.</h1><div className="hero-bottom"><p>I’m Aren Ashikian, a software engineer finishing an M.S. in Electrical & Computer Engineering at USC with a Machine Learning & Data Science concentration. My work spans full-stack products, applied ML, cloud systems, mobile apps, and hardware-connected software.</p><div className="hero-actions"><a className="button primary" href="#work">See selected work</a><a className="button text" href="https://github.com/ArenAshikian" target="_blank" rel="noreferrer">GitHub ↗</a></div></div><div className="signal-grid" aria-hidden="true">{Array.from({length:42}).map((_,i)=><i key={i} style={{'--delay':`${i%7*70}ms`}}/>)}</div></section>
-<section id="work" className="section-shell block" data-reveal><div className="section-head"><span>01 / Selected work</span><p>Projects chosen for technical range, not repository count.</p></div><div className="filters" role="group" aria-label="Project filters">{filters.map(f=><button key={f} className={filter===f?'active':''} onClick={()=>setFilter(f)}>{f}</button>)}</div><div className="project-grid">{visible.map((p,idx)=><article className={p.featured?'project featured':'project'} key={p.name}><div className="project-index">{String(idx+1).padStart(2,'0')}</div><div><div className="eyebrow">{p.eyebrow}</div><h2>{p.name}</h2><p>{p.description}</p><p className="detail">{p.detail}</p><div className="tech">{p.tech.map(t=><span key={t}>{t}</span>)}</div></div>{p.href?<a href={p.href} target="_blank" rel="noreferrer" aria-label={`Open ${p.name} on GitHub`}>View ↗</a>:<span className="private-project">Private repository</span>}</article>)}</div></section>
-<section id="about" className="section-shell split block" data-reveal><div className="section-head"><span>02 / About</span></div><div className="about-copy"><h2>Engineering across layers.</h2><p>I like projects where software touches something real: a sensor, a business process, a cloud deployment, a dataset large enough to expose bad assumptions, or an interface someone actually has to use.</p><p>My academic work at USC has pushed deeper into machine learning, databases, and cloud computing while my earlier work covered mobile development, web applications, teaching, and hardware. That mix has made me comfortable moving between implementation details and the broader system.</p><div className="principles"><span>Practical over performative.</span><span>Measure before optimizing.</span><span>Security is a feature.</span><span>Interfaces should explain themselves.</span></div></div></section>
-<section className="section-shell block proof" data-reveal><div className="proof-item"><strong>284,807</strong><span>transactions in fraud-classification work</span></div><div className="proof-item"><strong>1.30M</strong><span>parameters in an autoencoder trained for 50 epochs</span></div><div className="proof-item"><strong>10+</strong><span>students taught in Android development</span></div><div className="proof-item"><strong>Dec ’26</strong><span>expected USC M.S. graduation</span></div></section>
-<section id="education" className="section-shell block" data-reveal><div className="section-head"><span>03 / Education</span><p>Computer science foundation, then deeper specialization in ML, data, and systems.</p></div><div className="timeline">{education.map(([year,school,degree,note])=><article key={school}><time>{year}</time><div><h3>{school}</h3><strong>{degree}</strong>{note&&<p>{note}</p>}</div></article>)}</div><div className="course-strip"><b>USC focus:</b><span>Machine Learning I</span><span>Database Systems</span><span>Applied & Cloud Computing</span><span>Machine Learning / Data Science</span></div></section>
-<section id="skills" className="section-shell block" data-reveal><div className="section-head"><span>04 / Toolkit</span><p>No fake proficiency percentages. Just technologies I’ve used in projects, coursework, or development.</p></div><div className="skills-grid">{Object.entries(skills).map(([group,items])=><div className="skill-group" key={group}><h3>{group}</h3>{items.map(item=><span key={item}>{item}</span>)}</div>)}</div></section>
-<section className="section-shell block experience" data-reveal><div className="section-head"><span>05 / Earlier experience</span></div><article><time>2022</time><div><h3>Android Mobile Development Tech Fellow · CodePath</h3><p>Led an Android development course at Irvine Valley College for 10+ students, covering programming fundamentals, UI development, navigation, backend integration, third-party APIs, and GitHub collaboration.</p></div></article><article><time>2019</time><div><h3>Summer Academy Intern · Tustin Public Schools Foundation</h3><p>Taught introductory Lua programming using an educational Minecraft environment and helped students design 3D-printable objects.</p></div></article></section>
-<section id="contact" className="section-shell contact block" data-reveal><div className="contact-mark">LET’S BUILD SOMETHING USEFUL.</div><h2>Open to software, ML/data, cloud, and systems engineering opportunities.</h2><p>Based in Southern California. Available for software engineering, ML/data, cloud, and systems conversations.</p><div className="contact-actions"><a className="button primary" href="mailto:ashikianaren@gmail.com">ashikianaren@gmail.com</a><a className="button text" href="https://www.linkedin.com/in/arenash" target="_blank" rel="noreferrer">LinkedIn ↗</a><a className="button text" href="https://github.com/ArenAshikian" target="_blank" rel="noreferrer">GitHub ↗</a></div></section></main><footer><span>© {new Date().getFullYear()} Aren Ashikian</span><span>Designed & built with React + Vite.</span></footer></>}
+const education=[
+  ['Expected Dec 2026','University of Southern California','M.S. Electrical & Computer Engineering','Machine Learning & Data Science'],
+  ['Completed Dec 2024','California State University, Fullerton','B.S. Computer Science','GPA 3.75'],
+  ['Completed','Irvine Valley College','A.S. Natural Sciences','']
+];
+
+const navItems=['work','about','education','skills','contact'];
+
+function useTheme(){
+  const [theme,setTheme]=useState(()=>localStorage.getItem('theme')||'dark');
+  useEffect(()=>{
+    document.documentElement.dataset.theme=theme;
+    localStorage.setItem('theme',theme);
+  },[theme]);
+  const toggle=()=>{
+    const next=theme==='dark'?'light':'dark';
+    if(document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      document.startViewTransition(()=>setTheme(next));
+    }else setTheme(next);
+  };
+  return [theme,toggle];
+}
+
+function ProjectCard({project,index}){
+  const onMove=(e)=>{
+    if(window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches) return;
+    const r=e.currentTarget.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    e.currentTarget.style.setProperty('--ry',`${x*2.2}deg`);
+    e.currentTarget.style.setProperty('--rx',`${y*-2.2}deg`);
+  };
+  const onLeave=(e)=>{
+    e.currentTarget.style.setProperty('--ry','0deg');
+    e.currentTarget.style.setProperty('--rx','0deg');
+  };
+  return <article className={project.featured?'project featured':'project'} style={{'--i':index}} onPointerMove={onMove} onPointerLeave={onLeave}>
+    <div className="project-index">{String(index+1).padStart(2,'0')}</div>
+    <div className="project-body">
+      <div className="eyebrow">{project.eyebrow}</div>
+      <h2>{project.name}</h2>
+      <p>{project.description}</p>
+      <p className="detail">{project.detail}</p>
+      <div className="tech">{project.tech.map(t=><span key={t}>{t}</span>)}</div>
+    </div>
+    {project.href?
+      <a className="project-link" href={project.href} target="_blank" rel="noreferrer" aria-label={`Open ${project.name} on GitHub`}>View <span aria-hidden="true">↗</span></a>:
+      <span className="private-project">Private repository</span>}
+  </article>;
+}
+
+function Cursor(){
+  const [enabled,setEnabled]=useState(false);
+  const ref=useRef(null);
+  useEffect(()=>{
+    const ok=window.matchMedia('(pointer: fine) and (min-width: 901px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setEnabled(ok);
+    if(!ok)return;
+    const move=(e)=>{
+      if(ref.current){
+        ref.current.style.transform=`translate3d(${e.clientX}px,${e.clientY}px,0)`;
+        ref.current.dataset.active=e.target.closest('a,button,.project')?'true':'false';
+      }
+    };
+    window.addEventListener('pointermove',move,{passive:true});
+    return()=>window.removeEventListener('pointermove',move);
+  },[]);
+  return enabled?<div className="cursor-dot" ref={ref} aria-hidden="true"/>:null;
+}
+
+function App(){
+  const [theme,toggleTheme]=useTheme();
+  const [filter,setFilter]=useState('All');
+  const [menuOpen,setMenuOpen]=useState(false);
+  const [active,setActive]=useState('work');
+  const [copied,setCopied]=useState(false);
+  const filters=['All','ML','Cloud','Full Stack','Mobile'];
+  const visible=useMemo(()=>filter==='All'?projects:projects.filter(p=>`${p.eyebrow} ${p.description} ${p.tech.join(' ')}`.toLowerCase().includes(filter.toLowerCase())),[filter]);
+
+  useEffect(()=>{
+    document.body.classList.toggle('menu-open',menuOpen);
+    return()=>document.body.classList.remove('menu-open');
+  },[menuOpen]);
+
+  useEffect(()=>{
+    const key=(e)=>{
+      if(e.key==='Escape')setMenuOpen(false);
+      if(e.key.toLowerCase()==='t' && !['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))toggleTheme();
+    };
+    window.addEventListener('keydown',key);
+    return()=>window.removeEventListener('keydown',key);
+  },[toggleTheme]);
+
+  useEffect(()=>{
+    const nodes=[...document.querySelectorAll('[data-reveal]')];
+    if(!('IntersectionObserver'in window)||window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      nodes.forEach(n=>n.classList.add('is-visible'));
+      return;
+    }
+    const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('is-visible')}),{threshold:.08});
+    nodes.forEach(n=>io.observe(n));
+    return()=>io.disconnect();
+  },[]);
+
+  useEffect(()=>{
+    if(!('IntersectionObserver'in window))return;
+    const sections=navItems.map(id=>document.getElementById(id)).filter(Boolean);
+    const io=new IntersectionObserver(entries=>{
+      const visibleEntries=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio);
+      if(visibleEntries[0])setActive(visibleEntries[0].target.id);
+    },{rootMargin:'-22% 0px -58% 0px',threshold:[0,.1,.25,.5]});
+    sections.forEach(s=>io.observe(s));
+    return()=>io.disconnect();
+  },[]);
+
+  const copyEmail=async()=>{
+    try{
+      await navigator.clipboard.writeText('ashikianaren@gmail.com');
+      setCopied(true);
+      window.setTimeout(()=>setCopied(false),1600);
+    }catch{
+      window.location.href='mailto:ashikianaren@gmail.com';
+    }
+  };
+
+  return <>
+    <Cursor/>
+    <div className="progress" aria-hidden="true"><span/></div>
+    <header className="site-header">
+      <a className="brand" href="#top" aria-label="Aren Ashikian home"><span>AA</span><b>Aren Ashikian</b></a>
+      <button className="menu-button" onClick={()=>setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="primary-nav">{menuOpen?'Close':'Menu'}</button>
+      <nav id="primary-nav" className={menuOpen?'nav open':'nav'} aria-label="Primary navigation">
+        {navItems.map(item=><a key={item} className={active===item?'active':''} href={`#${item}`} onClick={()=>setMenuOpen(false)}><span>{item}</span></a>)}
+        <button className="theme-button" onClick={toggleTheme} aria-label="Toggle color theme">{theme==='dark'?'Light':'Dark'} theme <small>T</small></button>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section className="hero section-shell">
+        <div className="hero-kicker hero-load l1">SOFTWARE ENGINEER · ML / DATA · SOUTHERN CALIFORNIA</div>
+        <h1 className="hero-load l2">I build software that has to <em>work</em>, not just demo well.</h1>
+        <div className="hero-bottom hero-load l3">
+          <p>I’m Aren Ashikian, a software engineer finishing an M.S. in Electrical & Computer Engineering at USC with a Machine Learning & Data Science concentration. My work spans full-stack products, applied ML, cloud systems, mobile apps, and hardware-connected software.</p>
+          <div className="hero-actions">
+            <a className="button primary" href="#work">See selected work <span aria-hidden="true">↓</span></a>
+            <a className="button text link-sweep" href="https://github.com/ArenAshikian" target="_blank" rel="noreferrer">GitHub ↗</a>
+          </div>
+        </div>
+        <div className="signal-grid" aria-hidden="true">{Array.from({length:42}).map((_,i)=><i key={i} style={{'--delay':`${i%7*70}ms`}}/>)}</div>
+      </section>
+
+      <div className="status-rail" aria-label="Current status">
+        <span><i/>Open to opportunities</span><span>USC M.S. ECE</span><span>ML & Data Science</span><span>Expected Dec 2026</span>
+      </div>
+
+      <section id="work" className="section-shell block numbered" data-num="01" data-reveal>
+        <div className="section-head"><span>01 / Selected work</span><p>Projects chosen for technical range, not repository count.</p></div>
+        <div className="filter-row">
+          <div className="filters" role="group" aria-label="Project filters">{filters.map(f=><button key={f} aria-pressed={filter===f} className={filter===f?'active':''} onClick={()=>setFilter(f)}>{f}</button>)}</div>
+          <div className="filter-count" aria-live="polite">{visible.length} project{visible.length===1?'':'s'}</div>
+        </div>
+        <div className="project-grid">{visible.map((p,idx)=><ProjectCard project={p} index={idx} key={p.name}/>)}</div>
+      </section>
+
+      <section id="about" className="section-shell split block numbered" data-num="02" data-reveal>
+        <div className="section-head"><span>02 / About</span></div>
+        <div className="about-copy">
+          <h2>Engineering across layers.</h2>
+          <p>I like projects where software touches something real: a sensor, a business process, a cloud deployment, a dataset large enough to expose bad assumptions, or an interface someone actually has to use.</p>
+          <p>My academic work at USC has pushed deeper into machine learning, databases, and cloud computing while my earlier work covered mobile development, web applications, teaching, and hardware. That mix has made me comfortable moving between implementation details and the broader system.</p>
+          <div className="principles"><span>Practical over performative.</span><span>Measure before optimizing.</span><span>Security is a feature.</span><span>Interfaces should explain themselves.</span></div>
+        </div>
+      </section>
+
+      <section className="section-shell proof" data-reveal>
+        <div className="proof-item"><strong>284,807</strong><span>transactions in fraud-classification work</span></div>
+        <div className="proof-item"><strong>1.30M</strong><span>parameters in an autoencoder trained for 50 epochs</span></div>
+        <div className="proof-item"><strong>10+</strong><span>students taught in Android development</span></div>
+        <div className="proof-item"><strong>Dec ’26</strong><span>expected USC M.S. graduation</span></div>
+      </section>
+
+      <section id="education" className="section-shell block numbered" data-num="03" data-reveal>
+        <div className="section-head"><span>03 / Education</span><p>Computer science foundation, then deeper specialization in ML, data, and systems.</p></div>
+        <div className="timeline">{education.map(([year,school,degree,note])=><article key={school}><time>{year}</time><div><h3>{school}</h3><strong>{degree}</strong>{note&&<p>{note}</p>}</div></article>)}</div>
+        <div className="course-strip"><b>USC focus:</b><span>Machine Learning I</span><span>Database Systems</span><span>Applied & Cloud Computing</span><span>Machine Learning / Data Science</span></div>
+      </section>
+
+      <section id="skills" className="section-shell block numbered" data-num="04" data-reveal>
+        <div className="section-head"><span>04 / Toolkit</span><p>No fake proficiency percentages. Just technologies I’ve used in projects, coursework, or development.</p></div>
+        <div className="skills-grid">{Object.entries(skills).map(([group,items])=><div className="skill-group" key={group}><h3>{group}</h3>{items.map(item=><span key={item}>{item}</span>)}</div>)}</div>
+      </section>
+
+      <section className="section-shell block experience numbered" data-num="05" data-reveal>
+        <div className="section-head"><span>05 / Earlier experience</span></div>
+        <article><time>2022</time><div><h3>Android Mobile Development Tech Fellow · CodePath</h3><p>Led an Android development course at Irvine Valley College for 10+ students, covering programming fundamentals, UI development, navigation, backend integration, third-party APIs, and GitHub collaboration.</p></div></article>
+        <article><time>2019</time><div><h3>Summer Academy Intern · Tustin Public Schools Foundation</h3><p>Taught introductory Lua programming using an educational Minecraft environment and helped students design 3D-printable objects.</p></div></article>
+      </section>
+
+      <section id="contact" className="section-shell contact block numbered" data-num="06" data-reveal>
+        <div className="contact-mark">LET’S BUILD SOMETHING USEFUL.</div>
+        <h2>Open to software, ML/data, cloud, and systems engineering opportunities.</h2>
+        <p>Based in Southern California. Available for software engineering, ML/data, cloud, and systems conversations.</p>
+        <div className="contact-actions">
+          <button className="button primary copy-email" onClick={copyEmail}>{copied?'Copied email ✓':'Copy email'}</button>
+          <a className="button text" href="mailto:ashikianaren@gmail.com">Email me ↗</a>
+          <a className="button text" href="https://www.linkedin.com/in/arenash" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+          <a className="button text" href="https://github.com/ArenAshikian" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </div>
+      </section>
+    </main>
+    <footer><span>© {new Date().getFullYear()} Aren Ashikian</span><span>Designed & built with React + Vite.</span></footer>
+  </>;
+}
+
 createRoot(document.getElementById('root')).render(<React.StrictMode><App/></React.StrictMode>);
