@@ -2,6 +2,7 @@ import React,{useEffect,useState}from'react';
 import{createRoot}from'react-dom/client';
 import{createPortal}from'react-dom';
 import'./styles.css';
+import'./mobile-menu.css';
 const base=import.meta.env.BASE_URL;
 const featured=[
 {name:'Credit Card Fraud Classifier',meta:'USC EE 559 · Machine Learning',summary:'Fraud detection across 284,807 transactions, with the work centered on class imbalance, model behavior, and decision thresholds instead of raw accuracy.',result:'Logistic regression reached ≈ 0.736 F1 with the decision threshold tuned around 0.93.',tech:['Python','NumPy','Classification','Model evaluation'],href:'https://github.com/ArenAshikian/EE559-Final-Project',diagram:<><span className="metric"><b>284,807</b><small>transactions</small></span><span className="flow">→</span><span className="metric"><b>0.93</b><small>threshold</small></span><span className="flow">→</span><span className="metric accent"><b>0.736</b><small>F1</small></span></>},
